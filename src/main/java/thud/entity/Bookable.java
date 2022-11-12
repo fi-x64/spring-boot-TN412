@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class Bookable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "groupName")

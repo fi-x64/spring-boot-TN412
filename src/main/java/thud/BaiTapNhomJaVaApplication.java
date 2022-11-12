@@ -12,6 +12,7 @@ import thud.entity.Session;
 import thud.repository.DayRepository;
 import thud.repository.RoleRepository;
 import thud.repository.SessionRepository;
+import thud.repository.UserRepository;
 
 @SpringBootApplication
 // @EnableAutoConfiguration(exclude = {
@@ -25,7 +26,7 @@ public class BaiTapNhomJaVaApplication {
 
 	// @Bean
 	// public CommandLineRunner dataLoader(DayRepository repoDay, RoleRepository
-	// repoRole,
+	// repoRole, UserRepository userRepository,
 	// SessionRepository sessionRepository) {
 	// return new CommandLineRunner() {
 	// @Override
