@@ -31,6 +31,30 @@ public class User {
   @Size(max = 120)
   private String password;
 
+  @NotBlank
+  @Size(max = 120)
+  private String title;
+
+  @NotBlank
+  @Size(max = 120)
+  private String notes;
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getNotes() {
+    return notes;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
+
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();

@@ -29,11 +29,11 @@ public class Booking {
     private Bookable bookable;
 
     // Day
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "day_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Day day;
+    // @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    // @JoinColumn(name = "day_id", nullable = false)
+    // @OnDelete(action = OnDeleteAction.CASCADE)
+    // @JsonIgnore
+    // private Day day;
 
     // Session
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -56,14 +56,6 @@ public class Booking {
 
     public void setBookable(Bookable bookable) {
         this.bookable = bookable;
-    }
-
-    public Day getDay() {
-        return day;
-    }
-
-    public void setDay(Day day) {
-        this.day = day;
     }
 
     public Session getSession() {

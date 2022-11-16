@@ -99,4 +99,4 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 
     return http.build();
   }
-}
+};
