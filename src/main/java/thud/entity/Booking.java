@@ -1,5 +1,8 @@
 package thud.entity;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,7 +14,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -21,8 +26,15 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date date;
+
     // Bookable
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bookable_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
@@ -36,11 +48,35 @@ public class Booking {
     // private Day day;
 
     // Session
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "session_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Session session;
+    // @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    // @JoinColumn(name = "session_id", nullable = false)
+    // @OnDelete(action = OnDeleteAction.CASCADE)
+    // @JsonIgnore
+    // private Session session;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    // public Session getSession() {
+    // return session;
+    // }
+
+    // public void setSession(Session session) {
+    // this.session = session;
+    // }
 
     public Long getId() {
         return id;
@@ -56,13 +92,5 @@ public class Booking {
 
     public void setBookable(Bookable bookable) {
         this.bookable = bookable;
-    }
-
-    public Session getSession() {
-        return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
     }
 }

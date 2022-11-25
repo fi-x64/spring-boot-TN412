@@ -1,10 +1,14 @@
 package thud.entity;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,9 +21,9 @@ public class Session {
 	@Column(name = "name")
 	private String name;
 
-	public enum Type {
-		Breakfast, Morning, Lunch, Afternoon, Evening
-	}
+	// @OneToMany
+	// @JoinColumn(name = "session_id")
+	// private Set<Booking> bookings;
 
 	public Session() {
 	}

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import thud.entity.Booking;
@@ -20,6 +21,19 @@ import thud.repository.BookingRepository;
 public class BookingController {
     @Autowired
     BookingRepository bookingRepository;
+
+    // @GetMapping("/bookings?bookableId={bookableId}")
+    // public ResponseEntity<Booking>
+    // getBookingByBookableId(@RequestParam("bookableId") Long bookableId) {
+    // Optional<Booking> bookingData =
+    // bookingRepository.findByBookableId(bookableId);
+
+    // if (bookingData.isPresent()) {
+    // return new ResponseEntity<>(bookingData.get(), HttpStatus.OK);
+    // } else {
+    // return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    // }
+    // }
 
     @GetMapping("/bookings")
     public ResponseEntity<List<Booking>> getAllBookings() {

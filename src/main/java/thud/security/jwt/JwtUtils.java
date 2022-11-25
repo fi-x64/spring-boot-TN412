@@ -20,7 +20,8 @@ public class JwtUtils {
   private String jwtSecret;
 
   // @Value("${bezkoder.app.jwtExpirationMs}")
-  @Value("86400000")
+
+  @Value("8640000")
   private int jwtExpirationMs;
 
   public String generateJwtToken(Authentication authentication) {

@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -18,24 +19,28 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NotNull
   @NotBlank
   @Size(max = 20)
   private String username;
 
+  @NotNull
   @NotBlank
   @Size(max = 50)
   @Email
   private String email;
 
+  @NotNull
   @NotBlank
   @Size(max = 120)
   private String password;
 
-  @NotBlank
+  @Size(max = 120)
+  private String img;
+
   @Size(max = 120)
   private String title;
 
-  @NotBlank
   @Size(max = 120)
   private String notes;
 
@@ -106,5 +111,13 @@ public class User {
 
   public void setRoles(Set<Role> roles) {
     this.roles = roles;
+  }
+
+  public String getImg() {
+    return img;
+  }
+
+  public void setImg(String img) {
+    this.img = img;
   }
 }
