@@ -1,6 +1,8 @@
 package thud.entity;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -14,6 +16,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+// import antlr.collections.List;
 
 @Entity
 @Table(name = "bookables")
@@ -36,25 +42,18 @@ public class Bookable {
 	private String notes;
 
 	@OneToMany
+
 	@JoinColumn(name = "bookable_id")
 	private Set<Booking> bookings;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "bookable_day", joinColumns = @JoinColumn(name = "bookable_id"), inverseJoinColumns = @JoinColumn(name = "day_id"))
-	private Set<Day> days = new HashSet<>();
+	private List<Day> days = new ArrayList<>();
 
 	// Session
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "bookable_session", joinColumns = @JoinColumn(name = "bookable_id"), inverseJoinColumns = @JoinColumn(name = "session_id"))
-	private Set<Session> sessions = new HashSet<>();
-
-	public Set<Session> getSessions() {
-		return sessions;
-	}
-
-	public void setSessions(Set<Session> sessions) {
-		this.sessions = sessions;
-	}
+	private List<Session> sessions = new ArrayList<>();
 
 	public Bookable() {
 
@@ -123,16 +122,24 @@ public class Bookable {
 		this.bookings = bookings;
 	}
 
-	@Override
-	public String toString() {
-		return "Bookable [id=" + id + ", group=" + group + ", title=" + title + ", notes=" + notes + "]";
-	}
-
-	public Set<Day> getDays() {
+	public List<Day> getDays() {
 		return days;
 	}
 
-	public void setDays(Set<Day> days) {
+	public void setDays(List<Day> days) {
 		this.days = days;
+	}
+
+	public List<Session> getSessions() {
+		return sessions;
+	}
+
+	public void setSessions(List<Session> sessions) {
+		this.sessions = sessions;
+	}
+
+	@Override
+	public String toString() {
+		return "Bookable [id=" + id + ", group=" + group + ", title=" + title + ", notes=" + notes + "]";
 	}
 }

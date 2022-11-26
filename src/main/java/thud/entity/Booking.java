@@ -4,20 +4,15 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "bookings")
@@ -29,30 +24,28 @@ public class Booking {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "session")
+    private String session;
+
     @Column(name = "date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    // @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String date;
 
-    // Bookable
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bookable_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+    @Column(name = "bookable_id", nullable = false, insertable = false, updatable = false)
+    private Long bookable_id;
+
+    public String getSession() {
+        return session;
+    }
+
+    public void setSession(String session) {
+        this.session = session;
+    }
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "bookable_id")
     private Bookable bookable;
-
-    // Day
-    // @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    // @JoinColumn(name = "day_id", nullable = false)
-    // @OnDelete(action = OnDeleteAction.CASCADE)
-    // @JsonIgnore
-    // private Day day;
-
-    // Session
-    // @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    // @JoinColumn(name = "session_id", nullable = false)
-    // @OnDelete(action = OnDeleteAction.CASCADE)
-    // @JsonIgnore
-    // private Session session;
 
     public String getTitle() {
         return title;
@@ -60,14 +53,6 @@ public class Booking {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     // public Session getSession() {
@@ -78,6 +63,14 @@ public class Booking {
     // this.session = session;
     // }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public Long getId() {
         return id;
     }
@@ -86,11 +79,12 @@ public class Booking {
         this.id = id;
     }
 
-    public Bookable getBookable() {
-        return bookable;
+    public Long getBookable_id() {
+        return bookable_id;
     }
 
-    public void setBookable(Bookable bookable) {
-        this.bookable = bookable;
+    public void setBookable_id(Long bookable_id) {
+        this.bookable_id = bookable_id;
     }
+
 }

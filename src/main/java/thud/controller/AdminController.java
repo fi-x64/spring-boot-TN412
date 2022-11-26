@@ -69,7 +69,8 @@ public class AdminController {
     public ResponseEntity<Bookable> createBookable(@RequestBody Bookable bookable) {
         try {
             Bookable _bookable = bookableRepository
-                    .save(new Bookable(bookable.getGroup(), bookable.getImg(), bookable.getTitle(),
+                    .save(new Bookable(bookable.getGroup(), bookable.getImg(),
+                            bookable.getTitle(),
                             bookable.getNotes()));
             return new ResponseEntity<>(_bookable, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -78,7 +79,8 @@ public class AdminController {
     }
 
     @PutMapping("/bookables/{id}")
-    public ResponseEntity<Bookable> updateBookable(@PathVariable("id") long id, @RequestBody Bookable bookable) {
+    public ResponseEntity<Bookable> updateBookable(@PathVariable("id") long id,
+            @RequestBody Bookable bookable) {
         Optional<Bookable> bookableData = bookableRepository.findById(id);
 
         if (bookableData.isPresent()) {
@@ -87,7 +89,8 @@ public class AdminController {
             _bookable.setImg(bookable.getImg());
             _bookable.setTitle(bookable.getTitle());
             _bookable.setNotes(bookable.getNotes());
-            return new ResponseEntity<>(bookableRepository.save(_bookable), HttpStatus.OK);
+            return new ResponseEntity<>(bookableRepository.save(_bookable),
+                    HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
