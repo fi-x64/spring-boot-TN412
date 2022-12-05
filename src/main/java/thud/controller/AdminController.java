@@ -1,8 +1,10 @@
 package thud.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -22,8 +24,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import thud.entity.Bookable;
+import thud.entity.Day;
+import thud.entity.Session;
 import thud.entity.User;
+import thud.pojo.BookablePojo;
 import thud.repository.BookableRepository;
+import thud.repository.DayRepository;
+import thud.repository.SessionRepository;
 import thud.repository.UserRepository;
 
 @CrossOrigin
@@ -32,46 +39,56 @@ import thud.repository.UserRepository;
 public class AdminController {
     @Autowired
     BookableRepository bookableRepository;
+
+    @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    DayRepository dayRepository;
+
+    @Autowired
+    SessionRepository sessionRepository;
+
     // Bookable Controller
-    @GetMapping("/bookables")
-    public ResponseEntity<List<Bookable>> getAllBookables(@RequestParam(required = false) String title) {
-        try {
-            List<Bookable> bookables = new ArrayList<>();
-
-            if (title == null)
-                bookableRepository.findAll().forEach(bookables::add);
-            else
-                bookableRepository.findByTitleContaining(title).forEach(bookables::add);
-
-            if (bookables.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(bookables, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/bookables/{id}")
-    public ResponseEntity<Bookable> getBookableById(@PathVariable("id") long id) {
-        Optional<Bookable> bookableData = bookableRepository.findById(id);
-
-        if (bookableData.isPresent()) {
-            return new ResponseEntity<>(bookableData.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
     @PostMapping("/bookables")
-    public ResponseEntity<Bookable> createBookable(@RequestBody Bookable bookable) {
+    public ResponseEntity<Bookable> createBookable(@RequestBody BookablePojo bookablePojo) {
         try {
-            Bookable _bookable = bookableRepository
-                    .save(new Bookable(bookable.getGroup(), bookable.getImg(),
-                            bookable.getTitle(),
-                            bookable.getNotes()));
+            Bookable _bookable = new Bookable(bookablePojo.getGroup(),
+                    bookablePojo.getTitle(),
+                    bookablePojo.getNotes());
+
+            Long[] daysId = bookablePojo.getDays();
+            Long[] sessionId = bookablePojo.getSessions();
+            // String arrDays[] = { "", "Monday", "Tuesday", "Wednesday", "Thursday",
+            // "Friday", "Saturday", "Sunday" };
+
+            Set<Day> setDay = new HashSet<>();
+            Set<Session> setSession = new HashSet<>();
+
+            for (int i = 0; i < daysId.length; i++) {
+                try {
+                    Optional<Day> dayBookable = dayRepository.findById(daysId[i]);
+
+                    setDay.add(dayBookable.get());
+                } catch (Exception e) {
+                    System.out.println("Check error: " + e);
+                }
+            }
+
+            for (int i = 0; i < sessionId.length; i++) {
+                try {
+                    Optional<Session> sessionBookable = sessionRepository.findById(sessionId[i]);
+
+                    setSession.add(sessionBookable.get());
+                } catch (Exception e) {
+                    System.out.println("Check error: " + e);
+                }
+            }
+
+            _bookable.setDays(setDay);
+            _bookable.setSessions(setSession);
+            bookableRepository.save(_bookable);
+
             return new ResponseEntity<>(_bookable, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -86,7 +103,6 @@ public class AdminController {
         if (bookableData.isPresent()) {
             Bookable _bookable = bookableData.get();
             _bookable.setGroup(bookable.getGroup());
-            _bookable.setImg(bookable.getImg());
             _bookable.setTitle(bookable.getTitle());
             _bookable.setNotes(bookable.getNotes());
             return new ResponseEntity<>(bookableRepository.save(_bookable),
@@ -116,20 +132,6 @@ public class AdminController {
     // }
 
     // }
-
-    @GetMapping("/bookables/find")
-    public ResponseEntity<List<Bookable>> findByTitle(@PathVariable("title") String title) {
-        try {
-            List<Bookable> bookables = bookableRepository.findByTitleContaining(title);
-
-            if (bookables.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(bookables, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     // User Controller
     @RequestMapping(value = "/user/", method = RequestMethod.POST)
