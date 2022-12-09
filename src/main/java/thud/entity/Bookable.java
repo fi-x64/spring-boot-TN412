@@ -45,7 +45,7 @@ public class Bookable {
 	private Set<Day> days = new HashSet<>();
 
 	// Session
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "bookable_session", joinColumns = @JoinColumn(name = "bookable_id"), inverseJoinColumns = @JoinColumn(name = "session_id"))
 	private Set<Session> sessions = new HashSet<>();
 
